@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -42,7 +41,6 @@ namespace ClipBoard
         {
             InitializeComponent();
             nextClipboardViewer = (IntPtr)SetClipboardViewer((int)this.Handle);
-            ConfigureNotifyIcon();
             WindowState = FormWindowState.Minimized;
 
             if (!File.Exists("MyDatabase.sqlite"))
@@ -62,7 +60,8 @@ namespace ClipBoard
 
         private void Configuration_Resize(object sender, System.EventArgs e)
         {
-            ConfigureNotifyIcon();
+            if (WindowState == FormWindowState.Minimized)
+                Hide();
         }
 
         private void OpenConnection()
@@ -71,18 +70,10 @@ namespace ClipBoard
             m_dbConnection.Open();
         }
 
-        private void ConfigureNotifyIcon()
+        private void ShowForm()
         {
-            //Exibe o notifyIcon ao lado do relógio
-            notifyIcon.Visible = true;
-
-            //Nome exibido no notifyIcon
-            notifyIcon.Text = this.Text;
-
-            //// Aqui escondemos o form da taskbar...
-            ShowInTaskbar = false;
-
-            Hide();
+            Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void InsertText(string text)
@@ -161,8 +152,7 @@ namespace ClipBoard
 
         private void toolStripMenuOpen_Click(object sender, System.EventArgs e)
         {
-            WindowState = FormWindowState.Normal;
-            Show();
+            ShowForm();
         }
 
         private void toolStripMenuClose_Click(object sender, System.EventArgs e)
@@ -220,6 +210,11 @@ namespace ClipBoard
             {
                 MessageBox.Show(e.ToString());
             }
+        }
+
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            ShowForm();
         }
     }
 }

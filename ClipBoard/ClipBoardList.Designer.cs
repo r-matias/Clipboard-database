@@ -47,6 +47,8 @@
             this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "notifyIcon";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon_DoubleClick);
             // 
             // contextMenuStrip
             // 
@@ -95,7 +97,7 @@
             this.Order.HeaderText = "";
             this.Order.Name = "Order";
             this.Order.ReadOnly = true;
-            this.Order.Width = 60;
+            this.Order.Width = 40;
             // 
             // Description
             // 

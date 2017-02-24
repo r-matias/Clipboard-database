@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ClipBoard.Model;
+using ClipBoard.Repository;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -22,9 +25,8 @@ namespace ClipBoard
 
         IntPtr nextClipboardViewer;
 
-        SQLiteConnection m_dbConnection;
-
-        List<ClipboardFile> list;
+        private List<ClipboardFile> list;
+        private ClipboardRepository repository;
 
         public List<ClipboardFile> ListClipboardFile
         {
@@ -35,25 +37,19 @@ namespace ClipBoard
 
                 return list;
             }
+            set
+            {
+                list = value;
+            }
         }
 
         public ClipBoardList()
         {
+            repository = new ClipboardRepository();
+
             InitializeComponent();
             nextClipboardViewer = (IntPtr)SetClipboardViewer((int)this.Handle);
             WindowState = FormWindowState.Minimized;
-
-            if (!File.Exists("MyDatabase.sqlite"))
-                SQLiteConnection.CreateFile("MyDatabase.sqlite");
-
-            OpenConnection();
-
-            if (!TableExists("Registers"))
-            {
-                string sql = "CREATE TABLE Registers (id INT, text VARCHAR(5000))";
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                command.ExecuteNonQuery();
-            }
 
             LoadClipboardList();
         }
@@ -64,87 +60,19 @@ namespace ClipBoard
                 Hide();
         }
 
-        private void OpenConnection()
-        {
-            m_dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
-            m_dbConnection.Open();
-        }
-
         private void ShowForm()
         {
             Show();
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void InsertText(string text)
-        {
-            VerifyIfExistsText(text);
-            var id = IdIncrement();
-            string sql = "insert into Registers (id, text) values (" + id.ToString() + ", '" + text + "')";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            command.ExecuteNonQuery();
-        }
-
-        private int IdIncrement()
-        {
-            string sql = "SELECT MAX(id) FROM Registers";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            var newId = Convert.ToInt32(command.ExecuteScalar()) + 1;
-            return newId;
-        }
-
-        private void VerifyIfExistsText(string text)
-        {
-            string sql = "SELECT id FROM Registers WHERE text='"+ text +"'";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            var id = Convert.ToInt32(command.ExecuteScalar());
-
-            if (id > 0)
-                DeleteRegister(id);
-        }
-
-        private void DeleteRegister(int id)
-        {
-            string sql = "DELETE FROM Registers WHERE id=" + id.ToString() + "";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            command.ExecuteNonQuery();
-        }
-
-        public bool TableExists(string tableName)
-        {
-            Debug.Assert(m_dbConnection != null);
-            Debug.Assert(!string.IsNullOrWhiteSpace(tableName));
-
-            var cmd = m_dbConnection.CreateCommand();
-            cmd.CommandText = @"SELECT COUNT(*) FROM sqlite_master WHERE name=@TableName";
-            var p1 = cmd.CreateParameter();
-            p1.DbType = DbType.String;
-            p1.ParameterName = "TableName";
-            p1.Value = tableName;
-            cmd.Parameters.Add(p1);
-
-            var result = cmd.ExecuteScalar();
-            return ((long)result) == 1;
-        }
-
         private void LoadClipboardList()
         {
-            string sql = "SELECT * FROM Registers";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            int contador = 1;
-
-            while (reader.Read())
-            {
-                var register = new ClipboardFile();
-                register.Id = (int)reader["id"];
-                register.Description = (string)reader["text"];
-                register.Order = contador;
-                contador++;
-                ListClipboardFile.Add(register);
-            }
+            ListClipboardFile = repository.GetSelect();
 
             dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AllowUserToResizeColumns = false;
             dataGridView1.ScrollBars = ScrollBars.Vertical;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dataGridView1.DataSource = ListClipboardFile;
@@ -152,6 +80,7 @@ namespace ClipBoard
 
         private void toolStripMenuOpen_Click(object sender, System.EventArgs e)
         {
+            LoadClipboardList();
             ShowForm();
         }
 
@@ -165,6 +94,11 @@ namespace ClipBoard
             // defined in winuser.h
             const int WM_DRAWCLIPBOARD = 0x308;
             const int WM_CHANGECBCHAIN = 0x030D;
+            const int WM_NCATIVATE = 0x86;
+
+            //Hide the form when clicked outside
+            if (m.Msg == WM_NCATIVATE && this.ContainsFocus)
+                this.Hide();
 
             switch (m.Msg)
             {
@@ -193,11 +127,11 @@ namespace ClipBoard
                 IDataObject iData = new DataObject();
                 iData = Clipboard.GetDataObject();
 
-                if (m_dbConnection == null)
-                    OpenConnection();
+                //if (m_dbConnection == null)
+                //    OpenConnection();
 
                 if (iData.GetDataPresent(DataFormats.Text))
-                    InsertText((string)iData.GetData(DataFormats.Text));
+                    repository.Insert((string)iData.GetData(DataFormats.Text));
 
                 //if (iData.GetDataPresent(DataFormats.Rtf))
                 //    richTextBox1.Rtf = (string)iData.GetData(DataFormats.Rtf);
@@ -215,6 +149,15 @@ namespace ClipBoard
         private void notifyIcon_DoubleClick(object sender, EventArgs e)
         {
             ShowForm();
+        }
+
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            var row = dataGridView1.SelectedRows;
+
+            Clipboard.SetText(row[0].Cells[1].Value.ToString());
+
+            Hide();
         }
     }
 }

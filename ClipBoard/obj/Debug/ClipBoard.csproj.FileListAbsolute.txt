@@ -18,3 +18,20 @@ C:\Users\rafael.matias\Documents\Visual Studio 2015\Projects\ClipBoard2\ClipBoar
 C:\Users\rafael.matias\Documents\Visual Studio 2015\Projects\Clipboard\ClipBoard\bin\Debug\ClipBoard.exe.config
 C:\Users\rafael.matias\Documents\Visual Studio 2015\Projects\Clipboard\ClipBoard\obj\Debug\ClipBoard.exe
 C:\Users\rafael.matias\Documents\Visual Studio 2015\Projects\Clipboard\ClipBoard\obj\Debug\ClipBoard.pdb
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.csprojResolveAssemblyReference.cache
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.ClipBoardList.resources
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.Properties.Resources.resources
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.csproj.GenerateResource.Cache
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\ClipBoard.exe.config
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\ClipBoard.exe
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\ClipBoard.pdb
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\EntityFramework.dll
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\EntityFramework.SqlServer.dll
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\System.Data.SQLite.dll
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\System.Data.SQLite.EF6.dll
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\System.Data.SQLite.Linq.dll
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\EntityFramework.xml
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\EntityFramework.SqlServer.xml
+F:\Programação\Clipboard-database\ClipBoard\bin\Debug\System.Data.SQLite.xml
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.exe
+F:\Programação\Clipboard-database\ClipBoard\obj\Debug\ClipBoard.pdb

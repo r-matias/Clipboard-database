@@ -69,7 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClipboardFile.cs" />
+    <Compile Include="Model\ClipboardFile.cs" />
     <Compile Include="ClipBoardList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +78,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\ClipboardRepository.cs" />
+    <Compile Include="Repository\DatabaseConnection.cs" />
     <EmbeddedResource Include="ClipBoardList.resx">
       <DependentUpon>ClipBoardList.cs</DependentUpon>
     </EmbeddedResource>

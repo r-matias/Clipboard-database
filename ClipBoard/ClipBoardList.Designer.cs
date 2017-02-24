@@ -82,14 +82,15 @@
             this.Order,
             this.Description,
             this.Id});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Location = new System.Drawing.Point(1, 1);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(260, 237);
+            this.dataGridView1.Size = new System.Drawing.Size(281, 259);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.DoubleClick += new System.EventHandler(this.dataGridView1_DoubleClick);
             // 
             // Order
             // 
@@ -97,6 +98,7 @@
             this.Order.HeaderText = "";
             this.Order.Name = "Order";
             this.Order.ReadOnly = true;
+            this.Order.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Order.Width = 40;
             // 
             // Description
@@ -105,7 +107,8 @@
             this.Description.HeaderText = "";
             this.Description.Name = "Description";
             this.Description.ReadOnly = true;
-            this.Description.Width = 195;
+            this.Description.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Description.Width = 240;
             // 
             // Id
             // 
@@ -113,6 +116,7 @@
             this.Id.HeaderText = "";
             this.Id.Name = "Id";
             this.Id.ReadOnly = true;
+            this.Id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Id.Visible = false;
             // 
             // ClipBoardList

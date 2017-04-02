@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ClipBoard
@@ -87,6 +88,15 @@ namespace ClipBoard
         private void toolStripMenuClose_Click(object sender, System.EventArgs e)
         {
             Application.Exit();
+        }
+
+        enum KeyModifier
+        {
+            None = 0,
+            Alt = 1,
+            Control = 2,
+            Shift = 4,
+            WinKey = 8
         }
 
         protected override void WndProc(ref Message m)
